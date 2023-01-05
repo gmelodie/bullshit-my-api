@@ -2,22 +2,6 @@ mod parser;
 
 use std::io::Read;
 
-fn print_top_level(obj: &parser::JSONObject) {
-    let mut i = 0;
-    let mut aux = String::from("{\n");
-    for (key, value) in obj {
-        aux += format!("\t{}: {}", key, value).as_str();
-        if i < obj.len()-1 {
-            aux += ",";
-        }
-        aux += "\n";
-        i += 1;
-    }
-    aux += "}";
-    println!("{}", aux);
-}
-
-
 fn main() {
     let path = std::env::args().nth(1).expect("no path given");
     let file = std::fs::File::open(path);
@@ -33,5 +17,6 @@ fn main() {
             return;
         }
     };
-    print_top_level(&parser::parse(file_string));
+    let obj = parser::parse(file_string);
+    println!("{}", parser::print_json(obj, 0).as_str());
 }
